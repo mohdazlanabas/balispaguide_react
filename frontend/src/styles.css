@@ -1019,3 +1019,467 @@ body {
 .payment-price strong {
   color: #78350f;
 }
+
+/* Payment Success Page */
+.payment-success-container {
+  max-width: 600px;
+  margin: 4rem auto;
+  text-align: center;
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: #10b981;
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.success-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 1rem 0;
+}
+
+.success-message {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+.success-details {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin: 0 0 2rem 0;
+}
+
+.browse-again-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.browse-again-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+/* Confirmation Page */
+.confirmation-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-subtitle {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.back-to-booking-btn {
+  margin-bottom: 2rem;
+}
+
+.confirmation-section {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+.booking-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.confirmation-item {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+}
+
+.item-number {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.item-details h3 {
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.item-location {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0 0 1rem 0;
+}
+
+.detail-row {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row.subtotal {
+  background: #fef3c7;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  border: none;
+  color: #92400e;
+}
+
+.total-amount {
+  background: var(--primary);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
+.total-amount h3 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.payment-note {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Email Preview Sections */
+.customer-email-section {
+  border-left: 4px solid #3b82f6;
+}
+
+.spa-email-section {
+  border-left: 4px solid #10b981;
+}
+
+.email-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.email-item {
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--border);
+}
+
+.email-item strong {
+  color: var(--primary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.email-item ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.email-item li {
+  margin: 0.25rem 0;
+  color: var(--text-main);
+}
+
+.email-booking-item {
+  padding: 1rem;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.email-booking-item h4 {
+  margin: 0 0 0.75rem 0;
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.email-booking-item ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style-type: none;
+}
+
+.email-booking-item li {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.email-booking-item li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.email-theme-note {
+  padding: 0.75rem;
+  background: #e0e7ff;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.customer-email-section .email-theme-note {
+  background: #dbeafe;
+}
+
+.spa-email-section .email-theme-note {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.confirmation-footer {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.confirmation-footer .button-primary {
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .confirmation-section {
+    padding: 1.5rem;
+  }
+
+  .confirmation-header {
+    padding: 1.5rem;
+  }
+
+  .section-header {
+    font-size: 1.25rem;
+  }
+
+  .total-amount h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Stripe Payment Page */
+.stripe-payment-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stripe-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.order-summary-card,
+.stripe-form-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.order-summary-card h2 {
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--primary-light);
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.stripe-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.stripe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  padding: 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #635BFF;
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stripe-pay-button {
+  background: #635BFF;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.stripe-pay-button:hover:not(:disabled) {
+  background: #5145e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 91, 255, 0.3);
+}
+
+.stripe-pay-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.stripe-secure {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .stripe-container {
+    grid-template-columns: 1fr;
+  }
+
+  .order-summary-card {
+    order: 2;
+  }
+
+  .stripe-form-card {
+    order: 1;
+  }
+}
