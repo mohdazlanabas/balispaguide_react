@@ -207,13 +207,22 @@ npm run preview            # Preview production build
 
 ## Deployment
 
-See [DEPLOY.md](../DEPLOY.md) for complete Google Cloud Platform deployment guide.
+### Current Production (Digital Ocean)
+- **Server**: Digital Ocean Droplet at 170.64.148.27
+- **Backend**: PM2 running on port 4000
+- **Frontend**: Nginx serving built files from /var/www/balispaguide
+- **Deployment**: Automated via deploy.sh script
+- **Guide**: See [DEPLOYMENT.md](../DEPLOYMENT.md) for complete guide
 
-**Summary:**
-- **Backend**: Cloud Run (asia-southeast1)
-- **Frontend**: Cloud Storage + Cloud CDN
-- **Future Database**: Cloud SQL PostgreSQL
-- **Estimated Cost**: $8-37/month
+### Email Configuration
+- **Service**: Gmail/SendGrid (configurable via .env)
+- **Customer Emails**: Booking confirmations sent to customer
+- **Spa Emails**: Booking notifications sent to azlan@net1io.com
+- **Guide**: See [references/email_deploy.md](../references/email_deploy.md)
+
+### Alternative Deployment Options
+- **Google Cloud**: See [references/deploy_gcp.md](../references/deploy_gcp.md)
+- **DigitalOcean App Platform**: See [references/deploy_digitalcoean.md](../references/deploy_digitalcoean.md)
 
 ## Planned Features (In Development)
 
@@ -242,20 +251,27 @@ See [DEPLOY.md](../DEPLOY.md) for complete Google Cloud Platform deployment guid
 - Refund handling
 - Payment history
 
-### Phase 4: Database Migration (Planned)
-- Cloud SQL PostgreSQL setup
+### Phase 4: Email Notifications ✅ (Completed)
+- Email confirmation system (nodemailer)
+- Customer booking confirmations with details
+- Spa notification emails with customer info
+- Gmail/SendGrid configuration support
+- HTML-formatted email templates
+
+### Phase 5: Database Migration (Planned)
+- Cloud SQL PostgreSQL or MongoDB setup
 - User accounts table
 - Booking records table
 - Payment transactions table
 - Spa favorites/wishlist
 
-### Phase 5: Additional Features (Planned)
-- Email confirmations (SendGrid/Mailgun)
-- SMS notifications
+### Phase 6: Additional Features (Planned)
+- SMS notifications (Twilio)
 - Spa availability calendar
 - Loyalty programs
 - Gift vouchers
 - Social media integration
+- Custom domain and SSL/HTTPS
 
 ## Code Standards
 
@@ -365,8 +381,14 @@ const formatPrice = (price) => {
 ```
 
 ## Recent Changes
-- ✅ Created comprehensive deployment guide (DEPLOY.md)
-- ✅ Documented all-GCP deployment strategy
+- ✅ Deployed to Digital Ocean (http://170.64.148.27)
+- ✅ Implemented email notification system with nodemailer
+- ✅ Created automated deployment script (deploy.sh)
+- ✅ Added customer and spa booking email confirmations
+- ✅ Created comprehensive deployment guide (DEPLOYMENT.md)
+- ✅ Documented email configuration (references/email_deploy.md)
+- ✅ Set up PM2 process manager for backend
+- ✅ Configured Nginx for frontend hosting and API proxy
 - ✅ Added pricing display to all pages
 - ✅ Made all treatments visible on spa cards
 - ✅ Updated README with planned features
@@ -376,6 +398,7 @@ const formatPrice = (price) => {
 
 ---
 
-**Last Updated**: December 11, 2025
-**Project Status**: Feature Complete - Ready for Deployment
-**Next Steps**: Deploy to Google Cloud Platform
+**Last Updated**: December 14, 2025
+**Project Status**: Deployed to Production on Digital Ocean
+**Production URL**: http://170.64.148.27
+**Next Steps**: Configure SSL/HTTPS, custom domain, email service (Gmail/SendGrid)

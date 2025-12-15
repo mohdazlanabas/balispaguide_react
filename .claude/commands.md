@@ -238,18 +238,67 @@ cd frontend && npm outdated
 npm update
 ```
 
+## Production Deployment
+
+### Quick Deploy
+```bash
+# Deploy everything with one command
+./deploy.sh "Your commit message"
+
+# Or run interactively
+./deploy.sh
+```
+
+### Manual Deployment Steps
+```bash
+# 1. Commit and push locally
+git add .
+git commit -m "Your changes"
+git push origin main
+
+# 2. Deploy to server
+ssh root@170.64.148.27
+cd ~/balispaguidw_react
+git pull origin main
+
+# 3. Update backend
+cd backend
+npm ci --omit=dev
+pm2 restart bali-backend
+
+# 4. Build and deploy frontend
+cd ../frontend
+npm ci
+VITE_API_BASE=http://170.64.148.27 npm run build
+rsync -a --delete dist/ /var/www/balispaguide/
+systemctl reload nginx
+```
+
+### Monitor Production
+```bash
+# View backend logs
+ssh root@170.64.148.27 'pm2 logs bali-backend'
+
+# Check backend status
+ssh root@170.64.148.27 'pm2 status'
+
+# View Nginx logs
+ssh root@170.64.148.27 'tail -f /var/log/nginx/access.log'
+```
+
 ## Useful Aliases
 
 Add to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 # Bali Spa Guide aliases
-alias bsg="cd /Users/rogerwoolie/Documents/Project_CScience/new_balispaguide"
+alias bsg="cd /Users/rogerwoolie/Documents/Managed_Website/new_balispaguide"
 alias bsg-dev="bsg && npm run dev"
 alias bsg-backend="bsg && npm run dev:backend"
 alias bsg-frontend="bsg && npm run dev:frontend"
-alias bsg-deploy="bsg && ./deploy-all.sh"
-alias bsg-logs-be="gcloud run services logs tail bali-spa-backend --region asia-southeast1"
+alias bsg-deploy="bsg && ./deploy.sh"
+alias bsg-logs="ssh root@170.64.148.27 'pm2 logs bali-backend'"
+alias bsg-status="ssh root@170.64.148.27 'pm2 status'"
 ```
 
 ## Troubleshooting Guides

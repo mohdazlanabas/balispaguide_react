@@ -2,6 +2,12 @@
 
 A comprehensive web application for discovering and booking spa treatments across Bali and Lombok.
 
+## 🚀 Live Production
+**URL**: http://170.64.148.27
+**Status**: ✅ Deployed and Running
+**Platform**: Digital Ocean Droplet
+**Last Updated**: December 2025
+
 ## Features
 
 ### 🏠 Multi-Page Navigation
@@ -55,20 +61,34 @@ A comprehensive web application for discovering and booking spa treatments acros
 - **Express 5** - Web framework
 - **CSV Parse** - Data parsing
 - **CORS** - Cross-origin resource sharing
+- **Nodemailer** - Email service integration
+
+### Email & Notifications
+- **Nodemailer** - Email delivery (Gmail/SendGrid)
+- **HTML Templates** - Professional email formatting
+- **Async Processing** - Non-blocking email delivery
+
+### Deployment & Infrastructure
+- **Digital Ocean** - Cloud hosting platform
+- **PM2** - Process manager for backend
+- **Nginx** - Web server and reverse proxy
+- **Git** - Version control and deployment automation
 
 ### Planned Integrations
-- **Stripe** - Payment processing (coming soon)
-- **JWT** - Authentication tokens (coming soon)
-- **PostgreSQL/MongoDB** - User data storage (coming soon)
-- **SendGrid/Mailgun** - Email notifications (coming soon)
+- **Stripe** - Payment processing (in development)
+- **JWT** - Authentication tokens (planned)
+- **PostgreSQL/MongoDB** - User data storage (planned)
+- **Twilio** - SMS notifications (planned)
+- **SSL/Custom Domain** - HTTPS and professional domain (planned)
 
 ## Project Structure
 
 ```
 new_balispaguide/
 ├── backend/
-│   ├── server.js          # Express server
+│   ├── server.js          # Express server with API routes
 │   ├── spaData.js         # Data management & filtering logic
+│   ├── emailService.js    # Email notification system (nodemailer)
 │   ├── bsg_spas.csv       # Spa database
 │   └── package.json       # Backend dependencies
 ├── frontend/
@@ -95,9 +115,13 @@ new_balispaguide/
 │   ├── index.html
 │   ├── vite.config.js
 │   └── package.json
-├── references/           # Deployment guides
+├── references/           # Deployment and configuration guides
 │   ├── deploy_digitalcoean.md  # DigitalOcean App Platform/Droplet
-│   └── deploy_gcp.md           # Google Cloud Run + Storage/CDN
+│   ├── deploy_gcp.md           # Google Cloud Run + Storage/CDN
+│   └── email_deploy.md         # Email service configuration
+├── deploy.sh              # Automated deployment script
+├── DEPLOYMENT.md          # Current deployment guide
+├── AGENTS.md              # Repository guidelines
 ├── package.json           # Root convenience scripts
 └── README.md
 ```
@@ -197,6 +221,39 @@ Returns:
 ### GET `/api/spas/:id`
 Returns detailed information for a specific spa
 
+### POST `/api/send-booking-emails`
+Sends booking confirmation emails to customer and spa administrator
+
+Request body:
+```json
+{
+  "userInfo": {
+    "name": "Customer Name",
+    "email": "customer@example.com",
+    "phone": "+1234567890"
+  },
+  "cartItems": [
+    {
+      "spaName": "Spa Name",
+      "spaLocation": "Ubud",
+      "treatment": "Massage",
+      "date": "2025-12-20",
+      "time": "10:00 AM",
+      "quantity": 1,
+      "price": 1000000
+    }
+  ]
+}
+```
+
+Returns:
+```json
+{
+  "success": true,
+  "message": "Booking emails sent successfully"
+}
+```
+
 ## Features in Detail
 
 ### Cart Functionality
@@ -224,9 +281,32 @@ Returns detailed information for a specific spa
 
 ## Environment Variables
 
-### Frontend `.env`
+### Backend `.env`
+```env
+# Server Configuration
+PORT=4000
+NODE_ENV=production
+
+# Email Configuration (Gmail)
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password
+EMAIL_FROM="Bali Spa Guide <noreply@balispaguide.com>"
+
+# Or Email Configuration (SendGrid)
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+EMAIL_USER=apikey
+EMAIL_PASSWORD=SG.your-sendgrid-api-key
+EMAIL_FROM="Bali Spa Guide <noreply@balispaguide.com>"
 ```
+
+### Frontend `.env`
+```env
+# Development
 VITE_API_BASE=http://localhost:4000
+
+# Production (set during build)
+VITE_API_BASE=http://170.64.148.27
 ```
 
 ## Data Model
@@ -285,11 +365,21 @@ The application uses a modular architecture:
 - Edge (latest)
 
 ## Known Limitations
-- Payment is simulated (no actual payment processing yet)
+- Payment is simulated (Stripe integration in development)
 - Cart data stored in localStorage (not synced across devices)
-- No user authentication (in development)
-- No email confirmation system
+- No user authentication yet (in development)
 - Booking availability not checked with actual spas
+- No custom domain or SSL/HTTPS yet
+- Email service requires configuration (Gmail or SendGrid)
+
+## Completed Features
+
+### ✅ Email Notification System
+- **Customer Confirmations** - Professional HTML emails with booking details
+- **Spa Notifications** - Automated alerts to spa administrators
+- **Gmail/SendGrid Support** - Flexible email service configuration
+- **Delivery Tracking** - Comprehensive logging for email delivery
+- **Non-blocking Send** - Emails sent asynchronously to prevent timeout
 
 ## Planned Features (In Development)
 
@@ -310,9 +400,14 @@ The application uses a modular architecture:
 - Payment history tracking
 - PCI-compliant payment processing
 
+### 🌐 Domain & SSL
+- **Custom Domain** - Professional domain name
+- **SSL/HTTPS** - Secure encrypted connections
+- **CDN Integration** - Global content delivery
+
 ## Future Enhancements
-- Email booking confirmations with calendar invites
-- SMS notifications for booking reminders
+- Calendar invites with booking confirmations (.ics files)
+- SMS notifications for booking reminders (Twilio)
 - Spa availability calendar integration
 - Reviews and ratings system with user feedback
 - Photo galleries for spas with virtual tours
@@ -324,14 +419,48 @@ The application uses a modular architecture:
 - Favorite spas and treatments
 - Social media integration
 - Gift vouchers and packages
+- Custom domain with SSL/HTTPS
+- Database migration (PostgreSQL or MongoDB)
+- Advanced analytics and reporting
 
-## Deployment (DigitalOcean)
-- **App Platform (managed)**: Use `backend/` as a Web Service (Node 20) with `npm ci --omit=dev` and `npm start`, and `frontend/` as a Static Site with `npm install && npm run build` and `VITE_API_BASE` pointing at the API URL. Autodeploy on push recommended.
-- **Droplet (VM)**: Ubuntu, Node 20, pm2 running `backend/server.js` on `PORT=4000`, and Nginx serving the built `frontend/dist` from `/var/www/balispaguide` with `/api` proxied to `127.0.0.1:4000`. Rebuild frontend with `VITE_API_BASE=http://<droplet-ip>` then `rsync` to the web root; reload Nginx and restart pm2 as needed.
-- See `references/deploy_digitalcoean.md` for full commands, Nginx config, and HTTPS notes (filename matches the existing doc).
+## Production Deployment
 
-## Deployment (Google Cloud)
-- Full Cloud Run + Cloud Storage/CDN guide (with CI/CD and optional load balancer) lives in `references/deploy_gcp.md`.
+### Live Application
+- **URL**: http://170.64.148.27
+- **Platform**: Digital Ocean Droplet
+- **Status**: ✅ Currently Deployed and Running
+
+### Quick Deploy
+```bash
+./deploy.sh "Your commit message"
+```
+
+The automated deployment script handles:
+- Git commit and push
+- Server pull and dependency updates
+- Frontend rebuild with production API URL
+- Backend restart via PM2
+- Nginx configuration reload
+- Health checks
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+
+### Email Notifications
+The application sends two types of emails for each booking:
+- **Customer Confirmation**: Sent to customer's email with booking details
+- **Spa Notification**: Sent to spa administrator with customer info
+
+Configure email service (Gmail or SendGrid) via environment variables. See [references/email_deploy.md](references/email_deploy.md) for setup instructions.
+
+### Deployment Architecture
+- **Backend**: Node.js + Express on PM2 (port 4000)
+- **Frontend**: Built React app served by Nginx
+- **API Proxy**: Nginx forwards `/api` to backend
+- **Database**: CSV-based (migration to PostgreSQL/MongoDB planned)
+
+### Alternative Deployment Options
+- **DigitalOcean App Platform**: See [references/deploy_digitalcoean.md](references/deploy_digitalcoean.md)
+- **Google Cloud Run + CDN**: See [references/deploy_gcp.md](references/deploy_gcp.md)
 
 ## License
 ISC
