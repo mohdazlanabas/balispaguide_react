@@ -8,17 +8,20 @@ A full-stack web application for browsing and booking spa treatments in Bali. Fe
 ### Backend
 - **Runtime**: Node.js with Express 5.2.1
 - **Port**: 4000
-- **Data**: CSV-based (bsg_spas.csv) with 1059 spas
-- **APIs**: RESTful endpoints for filters, spa listings, and spa details
-- **Dependencies**: express, cors, csv-parse
+- **Data**: CSV-based (bsg_spas.csv) with 1059 spas + PostgreSQL for users/bookings
+- **Database**: PostgreSQL 15 (Docker for local, Cloud SQL for production)
+- **Authentication**: JWT with bcrypt password hashing
+- **APIs**: RESTful endpoints for filters, spa listings, auth, bookings
+- **Dependencies**: express, cors, csv-parse, pg, bcrypt, jsonwebtoken, nodemailer
 
 ### Frontend
 - **Framework**: React 19.2.1
 - **Build Tool**: Vite 7.2.7
 - **Routing**: React Router DOM 7.10.1
 - **Port**: 5173 (development)
-- **State Management**: React Context API (CartContext)
-- **Storage**: localStorage for cart persistence
+- **State Management**: React Context API (CartContext, AuthContext)
+- **Storage**: localStorage for cart + JWT token
+- **Authentication**: JWT stored in localStorage
 - **Theme**: Professional blue (#1e3a8a primary, #3b82f6 accent)
 
 ## Architecture
@@ -26,10 +29,24 @@ A full-stack web application for browsing and booking spa treatments in Bali. Fe
 ### Backend Structure
 ```
 backend/
-├── server.js           # Express server with CORS, API routes
-├── spaData.js          # CSV parser, filtering, sorting logic
-├── bsg_spas.csv        # Spa directory data
-└── package.json        # Dependencies and scripts
+├── config/
+│   └── db.js                   # PostgreSQL connection pool
+├── middleware/
+│   ├── auth.js                 # JWT authentication middleware
+│   └── roleCheck.js            # Role-based access control
+├── routes/
+│   ├── auth.js                 # Register, login, logout
+│   ├── user.js                 # User profile and bookings
+│   ├── spa.js                  # Spa owner dashboard
+│   └── admin.js                # Admin CMS
+├── migrations/
+│   └── 001_initial.sql         # Database schema
+├── server.js                   # Express server with CORS, API routes
+├── spaData.js                  # CSV parser, filtering, sorting logic
+├── emailService.js             # Email notifications
+├── bsg_spas.csv                # Spa directory data
+├── .env.local                  # Local development config
+└── package.json                # Dependencies and scripts
 ```
 
 ### Frontend Structure
@@ -43,11 +60,20 @@ frontend/
 │   │   ├── LocationPage.jsx        # 28 location cards + filtered view
 │   │   ├── TreatmentPage.jsx       # 20 treatment cards + filtered view
 │   │   ├── CartPage.jsx            # Cart management with pricing
-│   │   └── PaymentPage.jsx         # Booking summary with total
+│   │   ├── PaymentPage.jsx         # Booking summary with total
+│   │   ├── MyAccountPage.jsx       # User profile and booking history
+│   │   ├── SpaDashboardPage.jsx    # Spa owner bookings view
+│   │   ├── AdminPage.jsx           # Admin CMS
+│   │   └── auth/
+│   │       ├── LoginPage.jsx       # User login
+│   │       └── RegisterPage.jsx    # User registration
 │   ├── components/
-│   │   ├── Header.jsx              # Navigation with cart badge
+│   │   ├── Header.jsx              # Navigation with cart badge + login
 │   │   ├── SpaCard.jsx             # Treatment selection + Add to Cart
 │   │   ├── SortDropdown.jsx        # 6 sort options
+│   │   └── auth/
+│   │       ├── ProtectedRoute.jsx  # Route guard
+│   │       └── RoleRoute.jsx       # Role-based route guard
 │   │   ├── FilterBar.jsx           # Location/treatment/budget filters
 │   │   └── [other components]
 │   ├── context/
@@ -164,19 +190,22 @@ Returns single spa object by ID.
 
 ## Running the Application
 
-### Development Mode
+### Development Mode (with Docker)
 
-**Option 1: Using root npm scripts (recommended)**
+**Step 1: Start PostgreSQL**
 ```bash
-npm run dev              # Starts both backend and frontend
-npm run dev:backend      # Backend only (port 4000)
-npm run dev:frontend     # Frontend only (port 5173)
-npm run install:all      # Install all dependencies
+docker-compose up -d
+# Wait 10 seconds for database to initialize
+docker logs balispaguide-postgres
 ```
 
-**Option 2: Manual commands**
+**Step 2: Start Application**
 ```bash
-# Backend
+# Option 1: Using root npm scripts (recommended)
+npm run dev:backend      # Backend only (port 4000)
+npm run dev:frontend     # Frontend only (port 5173)
+
+# Option 2: Manual commands
 cd backend
 node server.js
 
@@ -188,6 +217,18 @@ npm run dev
 **Access Points:**
 - Frontend: http://localhost:5173
 - Backend: http://localhost:4000
+- Database UI: http://localhost:5050 (pgAdmin)
+  - Email: `admin@balispaguide.com`
+  - Password: `admin`
+
+**Stop Everything:**
+```bash
+# Stop Docker containers
+docker-compose down
+
+# Or keep data and just stop
+docker-compose stop
+```
 
 ### Production Build
 ```bash
@@ -212,7 +253,7 @@ npm run preview            # Preview production build
 - **Backend**: PM2 running on port 4000
 - **Frontend**: Nginx serving built files from /var/www/balispaguide
 - **Deployment**: Automated via deploy.sh script
-- **Guide**: See [DEPLOYMENT.md](../DEPLOYMENT.md) for complete guide
+- **Guide**: See [deployment.md](../deployment.md) for complete guide
 
 ### Email Configuration
 - **Service**: Gmail/SendGrid (configurable via .env)
@@ -339,10 +380,15 @@ export const useCart = () => {
 - **Last Commit**: "Initial commit - balispaguidw_react" (3ccf45d)
 
 ## Support Resources
-- README.md: User-facing documentation
-- DEPLOY.md: Complete GCP deployment guide
-- backend/spaData.js: Data processing logic documentation
-- frontend/src/context/CartContext.jsx: Cart system implementation
+- **README.md**: User-facing documentation
+- **references/plan.md**: Development timeline and task tracking
+- **references/dev_guide.md**: Complete local development guide with Docker
+- **deployment.md**: Production deployment guide
+- **docker-compose.yml**: Local PostgreSQL setup
+- **backend/migrations/001_initial.sql**: Database schema
+- **backend/config/db.js**: Database connection
+- **backend/spaData.js**: Data processing logic documentation
+- **frontend/src/context/CartContext.jsx**: Cart system implementation
 
 ## Development Notes
 
@@ -385,7 +431,7 @@ const formatPrice = (price) => {
 - ✅ Implemented email notification system with nodemailer
 - ✅ Created automated deployment script (deploy.sh)
 - ✅ Added customer and spa booking email confirmations
-- ✅ Created comprehensive deployment guide (DEPLOYMENT.md)
+- ✅ Created comprehensive deployment guide (deployment.md)
 - ✅ Documented email configuration (references/email_deploy.md)
 - ✅ Set up PM2 process manager for backend
 - ✅ Configured Nginx for frontend hosting and API proxy

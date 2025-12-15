@@ -74,10 +74,14 @@ A comprehensive web application for discovering and booking spa treatments acros
 - **Nginx** - Web server and reverse proxy
 - **Git** - Version control and deployment automation
 
+### Database & Authentication
+- **PostgreSQL 15** - User accounts and bookings
+- **Docker** - Local development database
+- **JWT** - Authentication tokens with bcrypt
+- **Role-based Access** - User, Spa Owner, Admin roles
+
 ### Planned Integrations
 - **Stripe** - Payment processing (in development)
-- **JWT** - Authentication tokens (planned)
-- **PostgreSQL/MongoDB** - User data storage (planned)
 - **Twilio** - SMS notifications (planned)
 - **SSL/Custom Domain** - HTTPS and professional domain (planned)
 
@@ -120,8 +124,8 @@ new_balispaguide/
 │   ├── deploy_gcp.md           # Google Cloud Run + Storage/CDN
 │   └── email_deploy.md         # Email service configuration
 ├── deploy.sh              # Automated deployment script
-├── DEPLOYMENT.md          # Current deployment guide
-├── AGENTS.md              # Repository guidelines
+├── references/deployment.md          # Current deployment guide
+├── references/agents.md              # Repository guidelines
 ├── package.json           # Root convenience scripts
 └── README.md
 ```
@@ -131,21 +135,25 @@ new_balispaguide/
 ### Prerequisites
 - Node.js (v18 or higher)
 - npm (v9 or higher)
+- **Docker Desktop** (for local development with PostgreSQL)
 
-### Installation
+### Quick Start (5 Minutes)
 
-1. **Clone or navigate to the project directory**
+1. **Navigate to the project directory**
    ```bash
    cd new_balispaguide
    ```
 
-2. **Install all dependencies**
+2. **Start PostgreSQL with Docker**
    ```bash
-   # Install root, backend, and frontend dependencies
-   npm run install:all
+   # Start database (downloads Docker image first time)
+   docker-compose up -d
+
+   # Wait 10 seconds for initialization
+   docker logs balispaguide-postgres
    ```
 
-   Or install individually:
+3. **Install dependencies**
    ```bash
    # Backend
    cd backend
@@ -443,7 +451,7 @@ The automated deployment script handles:
 - Nginx configuration reload
 - Health checks
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+See [references/deployment.md](references/deployment.md) for complete deployment guide.
 
 ### Email Notifications
 The application sends two types of emails for each booking:
